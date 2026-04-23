@@ -4,21 +4,32 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
 
-    // Hardcoded check for demo purposes
-    if (username === 'admin' && password === 'admin') {
-      onLogin(); // triggers the callback to open the admin state
-      setUsername('');
-      setPassword('');
-      onClose();
+    // Get credentials from env
+    const ADMIN_USER = import.meta.env.VITE_ADMIN_USER;
+    const ADMIN_PASS = import.meta.env.VITE_ADMIN_PASS;
+
+    if (username === ADMIN_USER && password === ADMIN_PASS) {
+      setSuccess('Login successful! Redirecting...');
+      
+      // Delay closing and login state slightly for better UX
+      setTimeout(() => {
+        onLogin();
+        onClose();
+        setSuccess('');
+        setUsername('');
+        setPassword('');
+      }, 1000);
     } else {
-      setError('Invalid username or password');
+      setError('Invalid admin credentials');
     }
   };
 
@@ -42,6 +53,12 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
           {error && (
             <div className="p-3 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 rounded-lg">
               {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="p-3 text-sm text-green-600 bg-green-50 dark:bg-green-900/20 rounded-lg">
+              {success}
             </div>
           )}
 
@@ -78,8 +95,6 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
           >
             Login
           </button>
-          
-          <p className="text-xs text-center text-gray-400 mt-2">Use admin / admin for demo</p>
         </form>
 
       </div>
