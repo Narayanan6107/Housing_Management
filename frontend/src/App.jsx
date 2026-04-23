@@ -184,6 +184,7 @@ export default function App() {
               onChange={(e) => setDistrictFilter(e.target.value)}
               className="px-3 py-2.5 rounded-xl text-sm bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-600 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-gold-400 shadow-sm"
             >
+              {isAdmin && <option value="">All Districts (Kerala)</option>}
               {KERALA_DISTRICTS.map(d => <option key={d} value={d}>{d}</option>)}
             </select>
 

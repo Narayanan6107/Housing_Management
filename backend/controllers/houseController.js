@@ -45,7 +45,7 @@ const updateHouse = async (req, res) => {
     const house = await House.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true, runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     );
     if (!house) {
       return res.status(404).json({ success: false, message: 'House not found' });
@@ -63,7 +63,7 @@ const deleteHouse = async (req, res) => {
     const house = await House.findByIdAndUpdate(
       req.params.id,
       { isActive: false },
-      { new: true }
+      { returnDocument: 'after' }
     );
     if (!house) {
       return res.status(404).json({ success: false, message: 'House not found' });
