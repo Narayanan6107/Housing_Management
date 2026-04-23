@@ -5,7 +5,8 @@ export default function HouseDetailsModal({ house, isOpen, onClose, isAdmin }) {
 
   if (!isOpen || !house) return null;
 
-  const { address, locationUrl, imageUrls, videoUrls, phone, email, loanNo } = house;
+  const { street, city, district, state, address, locationUrl, imageUrls, videoUrls, phone, email, loanNo } = house;
+  const fullAddress = street ? `${street}, ${city}, ${district}, ${state}` : address;
   
   // Safe filtering just in case there are empty strings
   const images = imageUrls?.filter(u => u.trim() !== '') || [];
@@ -112,7 +113,7 @@ export default function HouseDetailsModal({ house, isOpen, onClose, isAdmin }) {
         <div className="flex-1 overflow-y-auto p-6 sm:p-8 custom-scrollbar bg-gray-50 dark:bg-navy-900 border-t border-gray-100 dark:border-navy-800">
           
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white leading-snug mb-6">
-            {address}
+            {fullAddress}
           </h2>
 
           <div className="flex flex-col sm:flex-row gap-6">

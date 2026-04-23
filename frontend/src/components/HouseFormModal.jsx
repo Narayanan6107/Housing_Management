@@ -2,9 +2,18 @@ import { useState, useEffect } from 'react';
 import { convertGoogleDriveUrl } from '../services/api';
 
 export default function HouseFormModal({ isOpen, onClose, onSubmit, initialData }) {
+  const districts = [
+    'Alappuzha', 'Ernakulam', 'Idukki', 'Kannur', 'Kasaragod', 
+    'Kollam', 'Kottayam', 'Kozhikode', 'Malappuram', 'Palakkad', 
+    'Pathanamthitta', 'Thiruvananthapuram', 'Thrissur', 'Wayanad'
+  ];
+
   const [formData, setFormData] = useState({
     loanNo: '',
-    address: '',
+    street: '',
+    city: '',
+    district: '',
+    state: 'Kerala',
     locationUrl: '',
     imageUrls: [''],
     videoUrls: [''],
@@ -25,7 +34,10 @@ export default function HouseFormModal({ isOpen, onClose, onSubmit, initialData 
     } else if (isOpen) {
       setFormData({
         loanNo: '',
-        address: '',
+        street: '',
+        city: '',
+        district: '',
+        state: 'Kerala',
         locationUrl: '',
         imageUrls: [''],
         videoUrls: [''],
@@ -123,9 +135,26 @@ export default function HouseFormModal({ isOpen, onClose, onSubmit, initialData 
 
           {/* Location Area */}
           <div className="space-y-4">
-            <div>
-              <label className={labelClass}>Full Address (Till State) *</label>
-              <textarea required name="address" value={formData.address} onChange={handleChange} rows="2" className={fieldClass} placeholder="Street, Area, City, State..." />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="md:col-span-2">
+                <label className={labelClass}>Street / Building / House No *</label>
+                <input required type="text" name="street" value={formData.street} onChange={handleChange} className={fieldClass} placeholder="e.g. 123, Rose Villa..." />
+              </div>
+              <div>
+                <label className={labelClass}>City / Area *</label>
+                <input required type="text" name="city" value={formData.city} onChange={handleChange} className={fieldClass} placeholder="e.g. Hitech City" />
+              </div>
+              <div>
+                <label className={labelClass}>District *</label>
+                <select required name="district" value={formData.district} onChange={handleChange} className={fieldClass}>
+                  <option value="">Select District</option>
+                  {districts.map(d => <option key={d} value={d}>{d}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className={labelClass}>State</label>
+                <input readOnly type="text" name="state" value={formData.state} className={`${fieldClass} bg-gray-50 cursor-not-allowed`} />
+              </div>
             </div>
             <div>
               <label className={labelClass}>Google Maps Profile/Location URL</label>

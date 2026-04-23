@@ -6,10 +6,28 @@ const houseSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    address: {
+    street: {
       type: String,
-      required: [true, 'Address is required'],
+      required: [true, 'Street/Building is required'],
       trim: true,
+    },
+    city: {
+      type: String,
+      required: [true, 'City/Area is required'],
+      trim: true,
+    },
+    district: {
+      type: String,
+      required: [true, 'District is required'],
+      enum: [
+        'Alappuzha', 'Ernakulam', 'Idukki', 'Kannur', 'Kasaragod', 
+        'Kollam', 'Kottayam', 'Kozhikode', 'Malappuram', 'Palakkad', 
+        'Pathanamthitta', 'Thiruvananthapuram', 'Thrissur', 'Wayanad'
+      ]
+    },
+    state: {
+      type: String,
+      default: 'Kerala'
     },
     locationUrl: {
       type: String,   // Google Maps / any map link

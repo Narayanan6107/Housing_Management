@@ -10,7 +10,14 @@ import { fetchHouses, createHouse, updateHouse, deleteHouse } from './services/a
 import { sampleHouses } from './data/sampleHouses';
 
 /* ── App ─────────────────────────────────────────────────────────────────── */
+const KERALA_DISTRICTS = [
+  'Alappuzha', 'Ernakulam', 'Idukki', 'Kannur', 'Kasaragod', 
+  'Kollam', 'Kottayam', 'Kozhikode', 'Malappuram', 'Palakkad', 
+  'Pathanamthitta', 'Thiruvananthapuram', 'Thrissur', 'Wayanad'
+];
+
 export default function App() {
+  const [districtFilter, setDistrictFilter] = useState('Thiruvananthapuram');
   // ── Dark mode (default: light) ──────────────────────────────────────────
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('property-theme');
@@ -115,6 +122,12 @@ export default function App() {
     } else {
       await createHouse(formData);
     }
+    
+    // Automatically switch the home screen filter to the district we just updated
+    if (formData.district) {
+      setDistrictFilter(formData.district);
+    }
+    
     loadHouses(); // Refresh data
   };
 
@@ -124,13 +137,22 @@ export default function App() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return houses.filter((h) => {
+      // District matching: 
+      // If a district is selected, it must match.
+      // If 'All Districts' is selected, everyone must show.
+      const matchesDistrict = !districtFilter || h.district === districtFilter;
+      
       const matchesSearch =
         !q ||
         h.loanNo?.toLowerCase().includes(q) ||
-        h.address?.toLowerCase().includes(q);
-      return matchesSearch;
+        h.street?.toLowerCase().includes(q) ||
+        h.city?.toLowerCase().includes(q) ||
+        h.district?.toLowerCase().includes(q) ||
+        h.address?.toLowerCase().includes(q); // support legacy address field
+
+      return matchesDistrict && matchesSearch;
     });
-  }, [houses, search]);
+  }, [houses, search, districtFilter]);
 
   // ── Details View ────────────────────────────────────────────────────────
   const [selectedHouse, setSelectedHouse] = useState(null);
@@ -154,23 +176,34 @@ export default function App() {
           {/* Admin Controls */}
           
 
-          {/* Search Input */}
-          <div className="relative w-full sm:w-64 md:w-80 order-last sm:order-none mt-2 sm:mt-0">
-            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-              id="search-input"
-              type="text"
-              placeholder="Search by owner name or area..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm
-                         bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-600
-                         text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500
-                         focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent
-                         shadow-sm transition-all duration-200"
-            />
+          {/* Search & Filter Group */}
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto order-last sm:order-none mt-2 sm:mt-0">
+            {/* District Filter */}
+            <select 
+              value={districtFilter}
+              onChange={(e) => setDistrictFilter(e.target.value)}
+              className="px-3 py-2.5 rounded-xl text-sm bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-600 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-gold-400 shadow-sm"
+            >
+              {KERALA_DISTRICTS.map(d => <option key={d} value={d}>{d}</option>)}
+            </select>
+
+            <div className="relative flex-1 sm:w-64 md:w-72">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                id="search-input"
+                type="text"
+                placeholder="Search by loan no, street, or city..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm
+                           bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-600
+                           text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500
+                           focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent
+                           shadow-sm transition-all duration-200"
+              />
+            </div>
           </div>
 
           {/* Dark Mode Toggle */}

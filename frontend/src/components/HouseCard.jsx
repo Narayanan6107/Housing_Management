@@ -1,7 +1,9 @@
 export default function HouseCard({ house, isAdmin, onEdit, onDelete, onCardClick }) {
   const {
-    loanNo, address, locationUrl, imageUrls, videoUrls, phone, email
+    loanNo, street, city, district, state, address, locationUrl, imageUrls, videoUrls, phone, email
   } = house;
+
+  const fullAddress = street ? `${street}, ${city}, ${district}, ${state}` : address;
 
   const displayImage = imageUrls && imageUrls.length > 0 ? imageUrls[0] : null;
   const imageCount = imageUrls ? imageUrls.length : 0;
@@ -24,7 +26,7 @@ export default function HouseCard({ house, isAdmin, onEdit, onDelete, onCardClic
         {displayImage ? (
           <img
             src={displayImage}
-            alt={`Property in ${address}`}
+            alt={`Property in ${fullAddress}`}
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
@@ -90,7 +92,7 @@ export default function HouseCard({ house, isAdmin, onEdit, onDelete, onCardClic
           <div className="flex-1 overflow-y-auto pr-1 text-sm text-gray-600 dark:text-gray-400 font-medium leading-relaxed custom-scrollbar relative">
              <div className="flex items-start gap-1">
                <svg className="w-4 h-4 text-gold-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-               <span>{address}</span>
+               <span>{fullAddress}</span>
              </div>
           </div>
           
