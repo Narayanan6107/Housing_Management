@@ -253,6 +253,7 @@ export default function App() {
         isOpen={isDetailsOpen}
         onClose={() => setIsDetailsOpen(false)}
         house={selectedHouse}
+        isAdmin={isAdmin}
       />
     </div>
   );
