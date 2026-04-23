@@ -1,0 +1,32 @@
+services:
+  # ── Backend (Node/Express API) ─────────────────────────────────────────────
+  - type: web
+    name: property-management-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGO_URI
+        sync: false   # Set this manually in Render dashboard
+      - key: FRONTEND_URL
+        sync: false   # Set to your frontend Render URL e.g. https://property-management-ui.onrender.com
+
+  # ── Frontend (Static Site via Vite build) ──────────────────────────────────
+  - type: web
+    name: property-management-ui
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        sync: false   # Set to your backend Render URL e.g. https://property-management-api.onrender.com/api
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

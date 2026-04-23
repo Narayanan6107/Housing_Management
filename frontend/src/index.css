@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-sans antialiased transition-colors duration-300;
+  }
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { @apply w-1.5; }
+  ::-webkit-scrollbar-track { @apply bg-gray-100 dark:bg-navy-900; }
+  ::-webkit-scrollbar-thumb { @apply bg-gold-400 rounded-full; }
+}
+
+@layer components {
+  /* House card image overlay gradient */
+  .card-img-overlay {
+    background: linear-gradient(to top, rgba(6,15,36,0.85) 0%, rgba(6,15,36,0.3) 60%, transparent 100%);
+  }
+
+  /* Gold badge */
+  .badge-gold {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gold-100 dark:bg-gold-950/40 text-gold-600 dark:text-gold-400 text-xs font-semibold tracking-wide;
+  }
+
+  /* Navy tag */
+  .badge-navy {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-navy-50 dark:bg-navy-900 text-navy-600 dark:text-navy-300 text-xs font-semibold;
+  }
+
+  /* Contact button */
+  .contact-btn {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold
+           transition-all duration-200 hover:scale-105 active:scale-95;
+  }
+}
+
+@layer utilities {
+  .font-display { font-family: 'Playfair Display', Georgia, serif; }
+  .text-balance { text-wrap: balance; }
+}

@@ -1,0 +1,9 @@
+node_modules
+.env
+dist
+.DS_Store
+*.log
+seed.js
+seed2.js
+fixLh3.js
+fixImgs.js
