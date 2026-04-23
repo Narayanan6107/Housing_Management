@@ -11,13 +11,12 @@ connectDB();
 const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
-const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? [process.env.FRONTEND_URL].filter(Boolean)   // Set FRONTEND_URL env var on Render
-  : [
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'http://localhost:3000',
-    ];
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000',
+].filter(Boolean); // Removes undefined/empty values
 
 app.use(cors({
   origin: (origin, callback) => {
